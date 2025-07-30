@@ -179,35 +179,6 @@ hideAndSeekTab:Button({
 	end
 })
 
-hideAndSeekTab:Button({
-	Title = "Become Invisible",
-	Callback = function()
-		if LocalPlayer.Character then
-			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-				if part:IsA("BasePart") then
-					part.Transparency = 1
-				elseif part:IsA("Accessory") then
-					part.Handle.Transparency = 1
-				end
-			end
-		end
-	end
-})
-
-hideAndSeekTab:Button({
-	Title = "Become Visible",
-	Callback = function()
-		if LocalPlayer.Character then
-			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-				if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-					part.Transparency = 0
-				elseif part:IsA("Accessory") then
-					part.Handle.Transparency = 0
-				end
-			end
-		end
-	end
-})
 
 -- === JUMP ROPE/GLASS BRIDGE TAB ===
 local jumpRopeTab = Window:Tab({
@@ -216,48 +187,26 @@ local jumpRopeTab = Window:Tab({
 })
 
 jumpRopeTab:Button({
-	Title = "Auto Jump Rope",
+	Title = "Teleport To End (JumpRope)",
 	Callback = function()
-		print("Auto jump rope activated")
+		print("Teleported")
 	end
 })
 
 jumpRopeTab:Button({
-	Title = "Glass Bridge Path",
+	Title = "Glass ESP",
 	Callback = function()
 		print("Showing safe glass bridge path")
 	end
 })
 
-jumpRopeTab:Slider({
-	Title = "Jump Timing",
-	Default = 5,
-	Min = 1,
-	Max = 10,
-	Callback = function(value)
-		print("Jump timing set to:", value)
-	end
-})
-
--- === MINGLE TAB ===
-local mingleTab = Window:Tab({
-	Title = "Mingle",
-	Icon = "users"
-})
-
-mingleTab:Button({
-	Title = "Auto Find Group",
+jumpRopeTab:Button({
+	Title = "Teleport To End (GlassBridge)",
 	Callback = function()
-		print("Auto finding mingle group")
+		print("Teleported")
 	end
 })
 
-mingleTab:Button({
-	Title = "Teleport to Center",
-	Callback = function()
-		print("Teleporting to mingle center")
-	end
-})
 
 -- === RANDOM FEATURES TAB ===
 local randomTab = Window:Tab({
@@ -303,7 +252,7 @@ randomTab:Toggle({
 	end
 })
 
-randomTab:Button({
+randomTab:Toggle({
 	Title = "Fly",
 	Callback = function()
 		local character = LocalPlayer.Character
@@ -316,7 +265,7 @@ randomTab:Button({
 	end
 })
 
-randomTab:Button({
+randomTab:Toggle({
 	Title = "Noclip",
 	Callback = function()
 		if LocalPlayer.Character then
@@ -335,19 +284,13 @@ local rebelTab = Window:Tab({
 	Icon = "shield"
 })
 
-rebelTab:Button({
-	Title = "Kill All Guards",
+rebelTab:Toggle({
+	Title = "Aimbot",
 	Callback = function()
 		print("Attempting to eliminate guards")
 	end
 })
 
-rebelTab:Button({
-	Title = "Free All Players",
-	Callback = function()
-		print("Freeing all players")
-	end
-})
 
 rebelTab:Toggle({
 	Title = "God Mode",
