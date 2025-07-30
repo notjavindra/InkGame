@@ -1,0 +1,57 @@
+-- Load WindUI
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+
+local WalkSpeedValue, JumpPowerValue = 16, 50
+local SpeedEnabled = false
+
+-- Create Window
+local UI = WindUI:CreateWindow("Game Enhancer", Vector2.new(500, 350), Enum.KeyCode.RightControl)
+
+-- Main Tab
+local mainTab = UI:CreateTab("Main")
+
+mainTab:CreateButton("Win Red Light Green Light", function()
+    local pos = Vector3.new(-46.143, 1023.516, 135.9)
+    local cf = CFrame.new(pos)
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.Character:MoveTo(pos)
+        -- Optional if MoveTo fails to teleport
+        LocalPlayer.Character:PivotTo(cf)
+    end
+end)
+
+-- Adjustments Tab
+local adjustTab = UI:CreateTab("Adjustments")
+
+adjustTab:CreateSlider("WalkSpeed", 0, 300, 16, function(val)
+    WalkSpeedValue = val
+end)
+
+adjustTab:CreateSlider("JumpPower", 0, 300, 50, function(val)
+    JumpPowerValue = val
+end)
+
+adjustTab:CreateSlider("Gravity", 0, 300, workspace.Gravity, function(val)
+    workspace.Gravity = val
+end)
+
+adjustTab:CreateToggle("Enable Speed & Jump", function(toggle)
+    SpeedEnabled = toggle
+end)
+
+-- Safe loop to apply values without rapid spam
+RunService.RenderStepped:Connect(function()
+    if SpeedEnabled and LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = WalkSpeedValue
+            humanoid.JumpPower = JumpPowerValue
+        end
+    end
+end)
