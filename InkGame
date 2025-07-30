@@ -1,5 +1,6 @@
--- Load OrionLib
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Mobile%20Friendly%20Orion"))()
+-- Load WindUI
+local Version = "1.6.31"
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. Version .. "/main.lua"))()
 
 -- Services
 local Players = game:GetService("Players")
@@ -13,22 +14,31 @@ local WalkSpeedValue, JumpPowerValue = 16, 50
 local SpeedEnabled = false
 
 -- Create Window
-local Window = OrionLib:MakeWindow({
-	Name = "Ink Game Script ",
-	HidePremium = false,
-	IntroText = "Loaded",
-	SaveConfig = false
+local Window = WindUI:CreateWindow({
+	Title = "Ink Game Script",
+	Icon = "rbxassetid://4483345998",
+	Author = "Script Creator",
+	Folder = "InkGameConfig",
+	Size = UDim2.fromOffset(580, 460),
+	KeySystem = {
+		Key = "InkGameKey2024",
+		Note = "Join our Discord for the key!",
+		URL = "https://discord.gg/example",
+		SaveKey = true
+	},
+	Transparent = true,
+	Theme = "Dark",
+	SideBarWidth = 170
 })
 
 -- === RED LIGHT TAB ===
-local redLightTab = Window:MakeTab({
-	Name = "RedLight",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local redLightTab = Window:Tab({
+	Title = "RedLight",
+	Icon = "lightbulb"
 })
 
-redLightTab:AddButton({
-	Name = "Win Red Light Green Light",
+redLightTab:Button({
+	Title = "Win Red Light Green Light",
 	Callback = function()
 		local pos = Vector3.new(-46.143, 1023.516, 135.9)
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -37,11 +47,10 @@ redLightTab:AddButton({
 	end
 })
 
-redLightTab:AddButton({
-	Name = "Teleport to Start",
+redLightTab:Button({
+	Title = "Teleport to Start",
 	Callback = function()
-		-- Add teleport to start position
-		local startPos = Vector3.new(0, 1000, 0) -- Adjust coordinates as needed
+		local startPos = Vector3.new(0, 1000, 0)
 		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 			LocalPlayer.Character:PivotTo(CFrame.new(startPos))
 		end
@@ -49,74 +58,65 @@ redLightTab:AddButton({
 })
 
 -- === DALGONA TAB ===
-local dalgonaTab = Window:MakeTab({
-	Name = "Dalgona",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local dalgonaTab = Window:Tab({
+	Title = "Dalgona",
+	Icon = "cookie"
 })
 
-dalgonaTab:AddButton({
-	Name = "Auto Complete Dalgona",
+dalgonaTab:Button({
+	Title = "Auto Complete Dalgona",
 	Callback = function()
-		-- Add Dalgona game functionality here
 		print("Dalgona auto-complete activated")
 	end
 })
 
-dalgonaTab:AddSlider({
-	Name = "Precision",
+dalgonaTab:Slider({
+	Title = "Precision",
+	Default = 5,
 	Min = 1,
 	Max = 10,
-	Default = 5,
-	Increment = 1,
-	ValueName = "Level",
-	Callback = function(val)
-		print("Precision set to:", val)
+	Callback = function(value)
+		print("Precision set to:", value)
 	end
 })
 
 -- === TUG OF WAR TAB ===
-local tugOfWarTab = Window:MakeTab({
-	Name = "Tug Of War",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local tugOfWarTab = Window:Tab({
+	Title = "Tug Of War",
+	Icon = "zap"
 })
 
-tugOfWarTab:AddButton({
-	Name = "Auto Win Tug of War",
+tugOfWarTab:Button({
+	Title = "Auto Win Tug of War",
 	Callback = function()
-		-- Add Tug of War functionality here
 		print("Tug of War auto-win activated")
 	end
 })
 
-tugOfWarTab:AddToggle({
-	Name = "Auto Click",
+tugOfWarTab:Toggle({
+	Title = "Auto Click",
 	Default = false,
-	Callback = function(val)
-		print("Auto Click:", val)
+	Callback = function(state)
+		print("Auto Click:", state)
 	end
 })
 
 -- === HIDE AND SEEK TAB ===
-local hideAndSeekTab = Window:MakeTab({
-	Name = "Hide And Seek",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local hideAndSeekTab = Window:Tab({
+	Title = "Hide And Seek",
+	Icon = "eye-off"
 })
 
-hideAndSeekTab:AddButton({
-	Name = "Best Hiding Spot",
+hideAndSeekTab:Button({
+	Title = "Best Hiding Spot",
 	Callback = function()
-		-- Teleport to best hiding spot
 		print("Teleporting to best hiding spot")
 	end
 })
 
-hideAndSeekTab:AddButton({
-	Name = "Become Invisible",
+hideAndSeekTab:Button({
+	Title = "Become Invisible",
 	Callback = function()
-		-- Make player invisible
 		if LocalPlayer.Character then
 			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
 				if part:IsA("BasePart") then
@@ -129,10 +129,9 @@ hideAndSeekTab:AddButton({
 	end
 })
 
-hideAndSeekTab:AddButton({
-	Name = "Become Visible",
+hideAndSeekTab:Button({
+	Title = "Become Visible",
 	Callback = function()
-		-- Make player visible again
 		if LocalPlayer.Character then
 			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
 				if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
@@ -146,118 +145,102 @@ hideAndSeekTab:AddButton({
 })
 
 -- === JUMP ROPE/GLASS BRIDGE TAB ===
-local jumpRopeTab = Window:MakeTab({
-	Name = "Jump Rope/Glass Bridge",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local jumpRopeTab = Window:Tab({
+	Title = "Jump Rope/Glass Bridge",
+	Icon = "activity"
 })
 
-jumpRopeTab:AddButton({
-	Name = "Auto Jump Rope",
+jumpRopeTab:Button({
+	Title = "Auto Jump Rope",
 	Callback = function()
-		-- Add jump rope functionality
 		print("Auto jump rope activated")
 	end
 })
 
-jumpRopeTab:AddButton({
-	Name = "Glass Bridge Path",
+jumpRopeTab:Button({
+	Title = "Glass Bridge Path",
 	Callback = function()
-		-- Show safe glass bridge path
 		print("Showing safe glass bridge path")
 	end
 })
 
-jumpRopeTab:AddSlider({
-	Name = "Jump Timing",
+jumpRopeTab:Slider({
+	Title = "Jump Timing",
+	Default = 5,
 	Min = 1,
 	Max = 10,
-	Default = 5,
-	Increment = 1,
-	ValueName = "Speed",
-	Callback = function(val)
-		print("Jump timing set to:", val)
+	Callback = function(value)
+		print("Jump timing set to:", value)
 	end
 })
 
 -- === MINGLE TAB ===
-local mingleTab = Window:MakeTab({
-	Name = "Mingle",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local mingleTab = Window:Tab({
+	Title = "Mingle",
+	Icon = "users"
 })
 
-mingleTab:AddButton({
-	Name = "Auto Find Group",
+mingleTab:Button({
+	Title = "Auto Find Group",
 	Callback = function()
-		-- Auto find mingle group
 		print("Auto finding mingle group")
 	end
 })
 
-mingleTab:AddButton({
-	Name = "Teleport to Center",
+mingleTab:Button({
+	Title = "Teleport to Center",
 	Callback = function()
-		-- Teleport to mingle center
 		print("Teleporting to mingle center")
 	end
 })
 
 -- === RANDOM FEATURES TAB ===
-local randomTab = Window:MakeTab({
-	Name = "Random Features",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local randomTab = Window:Tab({
+	Title = "Random Features",
+	Icon = "settings"
 })
 
-randomTab:AddSlider({
-	Name = "WalkSpeed",
-	Min = 0,
-	Max = 300,
+randomTab:Slider({
+	Title = "WalkSpeed",
 	Default = WalkSpeedValue,
-	Increment = 1,
-	ValueName = "Speed",
-	Callback = function(val)
-		WalkSpeedValue = val
+	Min = 0,
+	Max = 300,
+	Callback = function(value)
+		WalkSpeedValue = value
 	end
 })
 
-randomTab:AddSlider({
-	Name = "JumpPower",
-	Min = 0,
-	Max = 300,
+randomTab:Slider({
+	Title = "JumpPower",
 	Default = JumpPowerValue,
-	Increment = 1,
-	ValueName = "Power",
-	Callback = function(val)
-		JumpPowerValue = val
-	end
-})
-
-randomTab:AddSlider({
-	Name = "Gravity",
 	Min = 0,
 	Max = 300,
+	Callback = function(value)
+		JumpPowerValue = value
+	end
+})
+
+randomTab:Slider({
+	Title = "Gravity",
 	Default = workspace.Gravity,
-	Increment = 1,
-	ValueName = "Gravity",
-	Callback = function(val)
-		workspace.Gravity = val
+	Min = 0,
+	Max = 300,
+	Callback = function(value)
+		workspace.Gravity = value
 	end
 })
 
-randomTab:AddToggle({
-	Name = "Enable Speed/Jump",
+randomTab:Toggle({
+	Title = "Enable Speed/Jump",
 	Default = false,
-	Callback = function(val)
-		SpeedEnabled = val
+	Callback = function(state)
+		SpeedEnabled = state
 	end
 })
 
-randomTab:AddButton({
-	Name = "Fly",
+randomTab:Button({
+	Title = "Fly",
 	Callback = function()
-		-- Basic fly functionality
 		local character = LocalPlayer.Character
 		if character and character:FindFirstChild("HumanoidRootPart") then
 			local bodyVelocity = Instance.new("BodyVelocity")
@@ -268,10 +251,9 @@ randomTab:AddButton({
 	end
 })
 
-randomTab:AddButton({
-	Name = "Noclip",
+randomTab:Button({
+	Title = "Noclip",
 	Callback = function()
-		-- Toggle noclip
 		if LocalPlayer.Character then
 			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
 				if part:IsA("BasePart") then
@@ -283,33 +265,30 @@ randomTab:AddButton({
 })
 
 -- === REBEL TAB ===
-local rebelTab = Window:MakeTab({
-	Name = "Rebel",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+local rebelTab = Window:Tab({
+	Title = "Rebel",
+	Icon = "shield"
 })
 
-rebelTab:AddButton({
-	Name = "Kill All Guards",
+rebelTab:Button({
+	Title = "Kill All Guards",
 	Callback = function()
-		-- Add guard elimination functionality
 		print("Attempting to eliminate guards")
 	end
 })
 
-rebelTab:AddButton({
-	Name = "Free All Players",
+rebelTab:Button({
+	Title = "Free All Players",
 	Callback = function()
-		-- Free all players functionality
 		print("Freeing all players")
 	end
 })
 
-rebelTab:AddToggle({
-	Name = "God Mode",
+rebelTab:Toggle({
+	Title = "God Mode",
 	Default = false,
-	Callback = function(val)
-		if val then
+	Callback = function(state)
+		if state then
 			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
 				LocalPlayer.Character.Humanoid.MaxHealth = math.huge
 				LocalPlayer.Character.Humanoid.Health = math.huge
@@ -333,6 +312,3 @@ RunService.RenderStepped:Connect(function()
 		end
 	end
 end)
-
--- Initialize OrionLib
-OrionLib:Init()
