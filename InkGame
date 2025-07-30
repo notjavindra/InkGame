@@ -63,93 +63,20 @@ local dalgonaTab = Window:Tab({
 	Icon = "cookie"
 })
 
--- Dalgona Auto-Complete Variables
-local dalgonaEnabled = false
-local dalgonaSpeed = 5
-local dalgonaConnection = nil
-
-dalgonaTab:Toggle({
+dalgonaTab:Button({
 	Title = "Auto Complete Dalgona",
-	Default = false,
-	Callback = function(state)
-		dalgonaEnabled = state
-		if dalgonaEnabled then
-			-- Start auto-clicking for Dalgona
-			dalgonaConnection = RunService.RenderStepped:Connect(function()
-				if dalgonaEnabled then
-					-- Check if we're in the Dalgona game
-					local dalgonaOutline = workspace.Effects:FindFirstChild("UmbrellaOutline") or 
-					                      workspace.Effects:FindFirstChild("StarOutline") or 
-					                      workspace.Effects:FindFirstChild("CircleOutline") or 
-					                      workspace.Effects:FindFirstChild("TriangleOutline") or 
-					                      workspace.Effects:FindFirstChild("SackBoyOutline") or 
-					                      workspace.Effects:FindFirstChild("MonaLisaOutline")
-					
-					if dalgonaOutline then
-						-- Simulate mouse clicks on the outline parts
-						for _, part in pairs(dalgonaOutline:GetChildren()) do
-							if part:IsA("BasePart") and not part:GetAttribute("Done") then
-								-- Simulate precise clicking with speed control
-								local clickRate = dalgonaSpeed / 10
-								if math.random() < clickRate then
-									-- Fire a virtual click event
-									local virtualInputService = game:GetService("VirtualInputManager")
-									local camera = workspace.CurrentCamera
-									local screenPoint = camera:WorldToViewportPoint(part.Position)
-									
-									if screenPoint.Z > 0 then -- Part is visible on screen
-										virtualInputService:SendMouseButtonEvent(screenPoint.X, screenPoint.Y, 0, true, game, 1)
-										wait(0.01)
-										virtualInputService:SendMouseButtonEvent(screenPoint.X, screenPoint.Y, 0, false, game, 1)
-										wait(0.05) -- Small delay between clicks
-									end
-								end
-							end
-						end
-					end
-				end
-			end)
-		else
-			if dalgonaConnection then
-				dalgonaConnection:Disconnect()
-				dalgonaConnection = nil
-			end
-		end
+	Callback = function()
+		print("Dalgona auto-complete activated")
 	end
 })
 
 dalgonaTab:Slider({
-	Title = "Auto-Click Speed",
+	Title = "Precision",
 	Default = 5,
 	Min = 1,
 	Max = 10,
 	Callback = function(value)
-		dalgonaSpeed = value
-	end
-})
-
-dalgonaTab:Button({
-	Title = "Perfect Trace Mode",
-	Callback = function()
-		-- Enhanced auto-complete that follows the exact outline
-		if workspace.Effects:FindFirstChildOfClass("Model") then
-			for _, model in pairs(workspace.Effects:GetChildren()) do
-				if model.Name:find("Outline") then
-					for _, part in pairs(model:GetChildren()) do
-						if part:IsA("BasePart") and not part:GetAttribute("Done") then
-							-- Mark as completed instantly
-							part:SetAttribute("Done", true)
-							part.Color = Color3.fromRGB(0, 255, 0)
-							part.Transparency = 0
-							part.CastShadow = false
-							part.Name = "DalgonaClickPart"
-							part.Material = Enum.Material.Neon
-							part.Position = part.Position + Vector3.new(0, 0.005, 0)
-						end
-					end
-				end
-			end
-		end
+		print("Precision set to:", value)
 	end
 })
 
