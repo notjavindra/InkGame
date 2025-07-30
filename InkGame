@@ -17,11 +17,11 @@ local SpeedEnabled = false
 local Window = WindUI:CreateWindow({
 	Title = "Ink Game Script",
 	Icon = "rbxassetid://4483345998",
-	Author = "Merqury Developer",
+	Author = "Script Creator",
 	Folder = "InkGameConfig",
 	Size = UDim2.fromOffset(580, 460),
 	KeySystem = {
-		Key = "FIXED_KEY",
+		Key = "InkGameKey2024",
 		Note = "Join our Discord for the key!",
 		URL = "https://discord.gg/example",
 		SaveKey = true
@@ -118,7 +118,15 @@ dalgonaTab:Toggle({
 	end
 })
 
-
+dalgonaTab:Slider({
+	Title = "Auto-Click Speed",
+	Default = 5,
+	Min = 1,
+	Max = 10,
+	Callback = function(value)
+		dalgonaSpeed = value
+	end
+})
 
 dalgonaTab:Button({
 	Title = "Perfect Trace Mode",
