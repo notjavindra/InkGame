@@ -14,20 +14,20 @@ local SpeedEnabled = false
 
 -- Create Window
 local Window = OrionLib:MakeWindow({
-	Name = "Orion Controls",
+	Name = "Ink Game Script ",
 	HidePremium = false,
 	IntroText = "Loaded",
 	SaveConfig = false
 })
 
--- === MAIN TAB ===
-local mainTab = Window:MakeTab({
-	Name = "Main",
+-- === RED LIGHT TAB ===
+local redLightTab = Window:MakeTab({
+	Name = "RedLight",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
-mainTab:AddButton({
+redLightTab:AddButton({
 	Name = "Win Red Light Green Light",
 	Callback = function()
 		local pos = Vector3.new(-46.143, 1023.516, 135.9)
@@ -37,14 +37,180 @@ mainTab:AddButton({
 	end
 })
 
--- === ADJUSTMENTS TAB ===
-local adjustTab = Window:MakeTab({
-	Name = "Adjustments",
+redLightTab:AddButton({
+	Name = "Teleport to Start",
+	Callback = function()
+		-- Add teleport to start position
+		local startPos = Vector3.new(0, 1000, 0) -- Adjust coordinates as needed
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			LocalPlayer.Character:PivotTo(CFrame.new(startPos))
+		end
+	end
+})
+
+-- === DALGONA TAB ===
+local dalgonaTab = Window:MakeTab({
+	Name = "Dalgona",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
-adjustTab:AddSlider({
+dalgonaTab:AddButton({
+	Name = "Auto Complete Dalgona",
+	Callback = function()
+		-- Add Dalgona game functionality here
+		print("Dalgona auto-complete activated")
+	end
+})
+
+dalgonaTab:AddSlider({
+	Name = "Precision",
+	Min = 1,
+	Max = 10,
+	Default = 5,
+	Increment = 1,
+	ValueName = "Level",
+	Callback = function(val)
+		print("Precision set to:", val)
+	end
+})
+
+-- === TUG OF WAR TAB ===
+local tugOfWarTab = Window:MakeTab({
+	Name = "Tug Of War",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+tugOfWarTab:AddButton({
+	Name = "Auto Win Tug of War",
+	Callback = function()
+		-- Add Tug of War functionality here
+		print("Tug of War auto-win activated")
+	end
+})
+
+tugOfWarTab:AddToggle({
+	Name = "Auto Click",
+	Default = false,
+	Callback = function(val)
+		print("Auto Click:", val)
+	end
+})
+
+-- === HIDE AND SEEK TAB ===
+local hideAndSeekTab = Window:MakeTab({
+	Name = "Hide And Seek",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+hideAndSeekTab:AddButton({
+	Name = "Best Hiding Spot",
+	Callback = function()
+		-- Teleport to best hiding spot
+		print("Teleporting to best hiding spot")
+	end
+})
+
+hideAndSeekTab:AddButton({
+	Name = "Become Invisible",
+	Callback = function()
+		-- Make player invisible
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.Transparency = 1
+				elseif part:IsA("Accessory") then
+					part.Handle.Transparency = 1
+				end
+			end
+		end
+	end
+})
+
+hideAndSeekTab:AddButton({
+	Name = "Become Visible",
+	Callback = function()
+		-- Make player visible again
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+					part.Transparency = 0
+				elseif part:IsA("Accessory") then
+					part.Handle.Transparency = 0
+				end
+			end
+		end
+	end
+})
+
+-- === JUMP ROPE/GLASS BRIDGE TAB ===
+local jumpRopeTab = Window:MakeTab({
+	Name = "Jump Rope/Glass Bridge",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+jumpRopeTab:AddButton({
+	Name = "Auto Jump Rope",
+	Callback = function()
+		-- Add jump rope functionality
+		print("Auto jump rope activated")
+	end
+})
+
+jumpRopeTab:AddButton({
+	Name = "Glass Bridge Path",
+	Callback = function()
+		-- Show safe glass bridge path
+		print("Showing safe glass bridge path")
+	end
+})
+
+jumpRopeTab:AddSlider({
+	Name = "Jump Timing",
+	Min = 1,
+	Max = 10,
+	Default = 5,
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(val)
+		print("Jump timing set to:", val)
+	end
+})
+
+-- === MINGLE TAB ===
+local mingleTab = Window:MakeTab({
+	Name = "Mingle",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+mingleTab:AddButton({
+	Name = "Auto Find Group",
+	Callback = function()
+		-- Auto find mingle group
+		print("Auto finding mingle group")
+	end
+})
+
+mingleTab:AddButton({
+	Name = "Teleport to Center",
+	Callback = function()
+		-- Teleport to mingle center
+		print("Teleporting to mingle center")
+	end
+})
+
+-- === RANDOM FEATURES TAB ===
+local randomTab = Window:MakeTab({
+	Name = "Random Features",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+randomTab:AddSlider({
 	Name = "WalkSpeed",
 	Min = 0,
 	Max = 300,
@@ -56,7 +222,7 @@ adjustTab:AddSlider({
 	end
 })
 
-adjustTab:AddSlider({
+randomTab:AddSlider({
 	Name = "JumpPower",
 	Min = 0,
 	Max = 300,
@@ -68,7 +234,7 @@ adjustTab:AddSlider({
 	end
 })
 
-adjustTab:AddSlider({
+randomTab:AddSlider({
 	Name = "Gravity",
 	Min = 0,
 	Max = 300,
@@ -80,11 +246,80 @@ adjustTab:AddSlider({
 	end
 })
 
-adjustTab:AddToggle({
+randomTab:AddToggle({
 	Name = "Enable Speed/Jump",
 	Default = false,
 	Callback = function(val)
 		SpeedEnabled = val
+	end
+})
+
+randomTab:AddButton({
+	Name = "Fly",
+	Callback = function()
+		-- Basic fly functionality
+		local character = LocalPlayer.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local bodyVelocity = Instance.new("BodyVelocity")
+			bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+			bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+			bodyVelocity.Parent = character.HumanoidRootPart
+		end
+	end
+})
+
+randomTab:AddButton({
+	Name = "Noclip",
+	Callback = function()
+		-- Toggle noclip
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.CanCollide = false
+				end
+			end
+		end
+	end
+})
+
+-- === REBEL TAB ===
+local rebelTab = Window:MakeTab({
+	Name = "Rebel",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+rebelTab:AddButton({
+	Name = "Kill All Guards",
+	Callback = function()
+		-- Add guard elimination functionality
+		print("Attempting to eliminate guards")
+	end
+})
+
+rebelTab:AddButton({
+	Name = "Free All Players",
+	Callback = function()
+		-- Free all players functionality
+		print("Freeing all players")
+	end
+})
+
+rebelTab:AddToggle({
+	Name = "God Mode",
+	Default = false,
+	Callback = function(val)
+		if val then
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+				LocalPlayer.Character.Humanoid.MaxHealth = math.huge
+				LocalPlayer.Character.Humanoid.Health = math.huge
+			end
+		else
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+				LocalPlayer.Character.Humanoid.MaxHealth = 100
+				LocalPlayer.Character.Humanoid.Health = 100
+			end
+		end
 	end
 })
 
@@ -98,3 +333,6 @@ RunService.RenderStepped:Connect(function()
 		end
 	end
 end)
+
+-- Initialize OrionLib
+OrionLib:Init()
