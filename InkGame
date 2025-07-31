@@ -63,77 +63,7 @@ local dalgonaTab = Window:Tab({
 	Icon = "cookie"
 })
 
--- Dalgona Auto-Complete Variables
-local dalgonaEnabled = false
-local dalgonaConnection = nil
 
-dalgonaTab:Toggle({
-	Title = "Auto Complete Dalgona",
-	Default = false,
-	Callback = function(state)
-		dalgonaEnabled = state
-		if dalgonaEnabled then
-			-- Start auto-clicking for Dalgona
-			dalgonaConnection = RunService.RenderStepped:Connect(function()
-				if dalgonaEnabled then
-					-- Check if we're in the Dalgona game
-					local dalgonaOutline = workspace.Effects:FindFirstChild("UmbrellaOutline") or 
-					                      workspace.Effects:FindFirstChild("StarOutline") or 
-					                      workspace.Effects:FindFirstChild("CircleOutline") or 
-					                      workspace.Effects:FindFirstChild("TriangleOutline") or 
-					                      workspace.Effects:FindFirstChild("SackBoyOutline") or 
-					                      workspace.Effects:FindFirstChild("MonaLisaOutline")
-					
-					if dalgonaOutline then
-						-- Simulate mouse clicks on the outline parts
-						for _, part in pairs(dalgonaOutline:GetChildren()) do
-							if part:IsA("BasePart") and not part:GetAttribute("Done") then
-								-- Mark as completed instantly
-								part:SetAttribute("Done", true)
-								part.Color = Color3.fromRGB(0, 255, 0)
-								part.Transparency = 0
-								part.CastShadow = false
-								part.Name = "DalgonaClickPart"
-								part.Material = Enum.Material.Neon
-								part.Position = part.Position + Vector3.new(0, 0.005, 0)
-							end
-						end
-					end
-				end
-			end)
-		else
-			if dalgonaConnection then
-				dalgonaConnection:Disconnect()
-				dalgonaConnection = nil
-			end
-		end
-	end
-})
-
-dalgonaTab:Button({
-	Title = "Perfect Trace Mode",
-	Callback = function()
-		-- Enhanced auto-complete that follows the exact outline
-		if workspace.Effects:FindFirstChildOfClass("Model") then
-			for _, model in pairs(workspace.Effects:GetChildren()) do
-				if model.Name:find("Outline") then
-					for _, part in pairs(model:GetChildren()) do
-						if part:IsA("BasePart") and not part:GetAttribute("Done") then
-							-- Mark as completed instantly
-							part:SetAttribute("Done", true)
-							part.Color = Color3.fromRGB(0, 255, 0)
-							part.Transparency = 0
-							part.CastShadow = false
-							part.Name = "DalgonaClickPart"
-							part.Material = Enum.Material.Neon
-							part.Position = part.Position + Vector3.new(0, 0.005, 0)
-						end
-					end
-				end
-			end
-		end
-	end
-})
 
 -- === TUG OF WAR TAB ===
 local tugOfWarTab = Window:Tab({
@@ -148,30 +78,11 @@ tugOfWarTab:Button({
 	end
 })
 
--- Auto Click Variables for Tug of War
-local tugAutoClickEnabled = false
-local tugClickConnection = nil
-
 tugOfWarTab:Toggle({
 	Title = "Auto Click",
 	Default = false,
 	Callback = function(state)
-		tugAutoClickEnabled = state
-		
-		if tugAutoClickEnabled then
-			tugClickConnection = RunService.RenderStepped:Connect(function()
-				if tugAutoClickEnabled then
-					-- Simulate rapid clicking for Tug of War
-					game:GetService("VirtualUser"):ClickButton1(Vector2.new(0,0))
-					wait(0.05)
-				end
-			end)
-		else
-			if tugClickConnection then
-				tugClickConnection:Disconnect()
-				tugClickConnection = nil
-			end
-		end
+		print("Auto Click:", state)
 	end
 })
 
@@ -188,35 +99,6 @@ hideAndSeekTab:Button({
 	end
 })
 
-hideAndSeekTab:Button({
-	Title = "Become Invisible",
-	Callback = function()
-		if LocalPlayer.Character then
-			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-				if part:IsA("BasePart") then
-					part.Transparency = 1
-				elseif part:IsA("Accessory") then
-					part.Handle.Transparency = 1
-				end
-			end
-		end
-	end
-})
-
-hideAndSeekTab:Button({
-	Title = "Become Visible",
-	Callback = function()
-		if LocalPlayer.Character then
-			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-				if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-					part.Transparency = 0
-				elseif part:IsA("Accessory") then
-					part.Handle.Transparency = 0
-				end
-			end
-		end
-	end
-})
 
 -- === JUMP ROPE/GLASS BRIDGE TAB ===
 local jumpRopeTab = Window:Tab({
@@ -244,6 +126,7 @@ jumpRopeTab:Button({
 		print("Teleported")
 	end
 })
+
 
 -- === RANDOM FEATURES TAB ===
 local randomTab = Window:Tab({
@@ -289,84 +172,26 @@ randomTab:Toggle({
 	end
 })
 
--- Fly Variables
-local flyEnabled = false
-local flyConnection = nil
-local bodyVelocity = nil
-
 randomTab:Toggle({
 	Title = "Fly",
-	Default = false,
-	Callback = function(state)
-		flyEnabled = state
+	Callback = function()
 		local character = LocalPlayer.Character
-		
-		if flyEnabled and character and character:FindFirstChild("HumanoidRootPart") then
-			-- Enable fly
-			bodyVelocity = Instance.new("BodyVelocity")
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local bodyVelocity = Instance.new("BodyVelocity")
 			bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
 			bodyVelocity.Velocity = Vector3.new(0, 0, 0)
 			bodyVelocity.Parent = character.HumanoidRootPart
-			
-			-- Fly controls
-			flyConnection = RunService.RenderStepped:Connect(function()
-				if flyEnabled and character and character:FindFirstChild("HumanoidRootPart") and bodyVelocity then
-					local camera = workspace.CurrentCamera
-					local moveVector = character.Humanoid.MoveDirection
-					local flySpeed = 50
-					
-					if moveVector.Magnitude > 0 then
-						bodyVelocity.Velocity = camera.CFrame.LookVector * moveVector.Z * flySpeed + camera.CFrame.RightVector * moveVector.X * flySpeed
-					else
-						bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-					end
-				end
-			end)
-		else
-			-- Disable fly
-			if bodyVelocity then
-				bodyVelocity:Destroy()
-				bodyVelocity = nil
-			end
-			if flyConnection then
-				flyConnection:Disconnect()
-				flyConnection = nil
-			end
 		end
 	end
 })
 
--- Noclip Variables
-local noclipEnabled = false
-local noclipConnection = nil
-
 randomTab:Toggle({
 	Title = "Noclip",
-	Default = false,
-	Callback = function(state)
-		noclipEnabled = state
-		
-		if noclipEnabled then
-			noclipConnection = RunService.Stepped:Connect(function()
-				if noclipEnabled and LocalPlayer.Character then
-					for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-						if part:IsA("BasePart") then
-							part.CanCollide = false
-						end
-					end
-				end
-			end)
-		else
-			if noclipConnection then
-				noclipConnection:Disconnect()
-				noclipConnection = nil
-			end
-			-- Re-enable collision
-			if LocalPlayer.Character then
-				for _, part in pairs(LocalPlayer.Character:GetChildren()) do
-					if part:IsA("BasePart") then
-						part.CanCollide = true
-					end
+	Callback = function()
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.CanCollide = false
 				end
 			end
 		end
@@ -379,55 +204,13 @@ local rebelTab = Window:Tab({
 	Icon = "shield"
 })
 
--- Aimbot Variables
-local aimbotEnabled = false
-local aimbotConnection = nil
-
 rebelTab:Toggle({
 	Title = "Aimbot",
-	Default = false,
-	Callback = function(state)
-		aimbotEnabled = state
-		
-		if aimbotEnabled then
-			aimbotConnection = RunService.RenderStepped:Connect(function()
-				if aimbotEnabled then
-					-- Find nearest guard/enemy
-					local camera = workspace.CurrentCamera
-					local character = LocalPlayer.Character
-					if character and character:FindFirstChild("HumanoidRootPart") then
-						local nearestEnemy = nil
-						local shortestDistance = math.huge
-						
-						-- Look for NPCs or enemies
-						for _, obj in pairs(workspace:GetChildren()) do
-							if obj:FindFirstChild("Humanoid") and obj:FindFirstChild("HumanoidRootPart") and obj ~= character then
-								-- Check if it's an enemy
-								if obj.Name:find("Guard") or obj.Name:find("Enemy") then
-									local distance = (character.HumanoidRootPart.Position - obj.HumanoidRootPart.Position).Magnitude
-									if distance < shortestDistance and distance < 100 then
-										shortestDistance = distance
-										nearestEnemy = obj
-									end
-								end
-							end
-						end
-						
-						-- Aim at nearest enemy
-						if nearestEnemy and nearestEnemy:FindFirstChild("Head") then
-							camera.CFrame = CFrame.lookAt(camera.CFrame.Position, nearestEnemy.Head.Position)
-						end
-					end
-				end
-			end)
-		else
-			if aimbotConnection then
-				aimbotConnection:Disconnect()
-				aimbotConnection = nil
-			end
-		end
+	Callback = function()
+		print("Attempting to eliminate guards")
 	end
 })
+
 
 rebelTab:Toggle({
 	Title = "God Mode",
