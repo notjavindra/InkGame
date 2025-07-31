@@ -5,7 +5,6 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 -- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local UIS = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Humanoid = Character:WaitForChild("Humanoid")
@@ -18,11 +17,11 @@ local SpeedEnabled = false
 local Window = WindUI:CreateWindow({
 	Title = "Ink Game Script",
 	Icon = "rbxassetid://4483345998",
-	Author = "Merqury Developer",
+	Author = "Script Creator",
 	Folder = "InkGameConfig",
 	Size = UDim2.fromOffset(580, 460),
 	KeySystem = {
-		Key = "FIXED_KEY",
+		Key = "InkGameKey2024",
 		Note = "Join our Discord for the key!",
 		URL = "https://discord.gg/example",
 		SaveKey = true
@@ -71,6 +70,15 @@ dalgonaTab:Button({
 	end
 })
 
+dalgonaTab:Slider({
+	Title = "Precision",
+	Default = 5,
+	Min = 1,
+	Max = 10,
+	Callback = function(value)
+		print("Precision set to:", value)
+	end
+})
 
 -- === TUG OF WAR TAB ===
 local tugOfWarTab = Window:Tab({
@@ -100,33 +108,41 @@ local hideAndSeekTab = Window:Tab({
 })
 
 hideAndSeekTab:Button({
-	Title = "Best Hiding Spot (hider)",
+	Title = "Best Hiding Spot",
 	Callback = function()
 		print("Teleporting to best hiding spot")
 	end
 })
 
-hideAndSeekTab:Toggle({
-	Title = "Auto Kill Hiders",
+hideAndSeekTab:Button({
+	Title = "Become Invisible",
 	Callback = function()
-		print("Teleporting to hiders")
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.Transparency = 1
+				elseif part:IsA("Accessory") then
+					part.Handle.Transparency = 1
+				end
+			end
+		end
 	end
 })
 
-hideAndSeekTab:Toggle({
-	Title = "Exit&Doors Esp",
+hideAndSeekTab:Button({
+	Title = "Become Visible",
 	Callback = function()
-		print("ESP")
+		if LocalPlayer.Character then
+			for _, part in pairs(LocalPlayer.Character:GetChildren()) do
+				if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+					part.Transparency = 0
+				elseif part:IsA("Accessory") then
+					part.Handle.Transparency = 0
+				end
+			end
+		end
 	end
 })
-
-hideAndSeekTab:Toggle({
-	Title = "Esp Keys",
-	Callback = function()
-		print("ESP")
-	end
-})
-
 
 -- === JUMP ROPE/GLASS BRIDGE TAB ===
 local jumpRopeTab = Window:Tab({
@@ -135,21 +151,48 @@ local jumpRopeTab = Window:Tab({
 })
 
 jumpRopeTab:Button({
-	Title = "Teleport To End (JumpRope)",
-		Callback = function()
-local pos = Vector3.new(734.32, 194.644, 918.741)
-if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-	LocalPlayer.Character:PivotTo(CFrame.new(pos))
-end
-
+	Title = "Auto Jump Rope",
+	Callback = function()
+		print("Auto jump rope activated")
+	end
+})
 
 jumpRopeTab:Button({
-	Title = "Glass ESP",
+	Title = "Glass Bridge Path",
 	Callback = function()
 		print("Showing safe glass bridge path")
 	end
 })
 
+jumpRopeTab:Slider({
+	Title = "Jump Timing",
+	Default = 5,
+	Min = 1,
+	Max = 10,
+	Callback = function(value)
+		print("Jump timing set to:", value)
+	end
+})
+
+-- === MINGLE TAB ===
+local mingleTab = Window:Tab({
+	Title = "Mingle",
+	Icon = "users"
+})
+
+mingleTab:Button({
+	Title = "Auto Find Group",
+	Callback = function()
+		print("Auto finding mingle group")
+	end
+})
+
+mingleTab:Button({
+	Title = "Teleport to Center",
+	Callback = function()
+		print("Teleporting to mingle center")
+	end
+})
 
 -- === RANDOM FEATURES TAB ===
 local randomTab = Window:Tab({
@@ -195,58 +238,15 @@ randomTab:Toggle({
 	end
 })
 
-local flying = false
-local flyBV = nil
-local connection = nil
-
 randomTab:Button({
-	Title = "Fly (Toggle)",
+	Title = "Fly",
 	Callback = function()
-		local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-		local root = character:FindFirstChild("HumanoidRootPart")
-		
-		if not root then return end
-
-		if not flying then
-			flying = true
-
-			-- Create BodyVelocity
-			flyBV = Instance.new("BodyVelocity")
-			flyBV.Velocity = Vector3.zero
-			flyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
-			flyBV.Parent = root
-
-			local moveVector = Vector3.zero
-
-			-- Movement update
-			connection = RunService.RenderStepped:Connect(function()
-				local camCF = workspace.CurrentCamera.CFrame
-				local direction = Vector3.zero
-				if UIS:IsKeyDown(Enum.KeyCode.W) then
-					direction += camCF.LookVector
-				end
-				if UIS:IsKeyDown(Enum.KeyCode.S) then
-					direction -= camCF.LookVector
-				end
-				if UIS:IsKeyDown(Enum.KeyCode.A) then
-					direction -= camCF.RightVector
-				end
-				if UIS:IsKeyDown(Enum.KeyCode.D) then
-					direction += camCF.RightVector
-				end
-				if UIS:IsKeyDown(Enum.KeyCode.Space) then
-					direction += camCF.UpVector
-				end
-				if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
-					direction -= camCF.UpVector
-				end
-
-				flyBV.Velocity = direction.Unit * 80
-			end)
-		else
-			flying = false
-			if connection then connection:Disconnect() end
-			if flyBV then flyBV:Destroy() end
+		local character = LocalPlayer.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			local bodyVelocity = Instance.new("BodyVelocity")
+			bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+			bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+			bodyVelocity.Parent = character.HumanoidRootPart
 		end
 	end
 })
@@ -277,9 +277,15 @@ rebelTab:Button({
 	end
 })
 
+rebelTab:Button({
+	Title = "Free All Players",
+	Callback = function()
+		print("Freeing all players")
+	end
+})
 
 rebelTab:Toggle({
-	Title = "God Mode (heals you)",
+	Title = "God Mode",
 	Default = false,
 	Callback = function(state)
 		if state then
