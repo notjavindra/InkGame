@@ -5,6 +5,7 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 -- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local Humanoid = Character:WaitForChild("Humanoid")
@@ -17,11 +18,11 @@ local SpeedEnabled = false
 local Window = WindUI:CreateWindow({
 	Title = "Ink Game Script",
 	Icon = "rbxassetid://4483345998",
-	Author = "Script Creator",
+	Author = "Merqury Developer",
 	Folder = "InkGameConfig",
 	Size = UDim2.fromOffset(580, 460),
 	KeySystem = {
-		Key = "InkGameKey2024",
+		Key = "FIXED_KEY",
 		Note = "Join our Discord for the key!",
 		URL = "https://discord.gg/example",
 		SaveKey = true
@@ -70,6 +71,7 @@ dalgonaTab:Button({
 	end
 })
 
+
 -- === TUG OF WAR TAB ===
 local tugOfWarTab = Window:Tab({
 	Title = "Tug Of War",
@@ -80,6 +82,14 @@ tugOfWarTab:Button({
 	Title = "Auto Win Tug of War",
 	Callback = function()
 		print("Tug of War auto-win activated")
+	end
+})
+
+tugOfWarTab:Toggle({
+	Title = "Auto Click",
+	Default = false,
+	Callback = function(state)
+		print("Auto Click:", state)
 	end
 })
 
@@ -126,19 +136,14 @@ local jumpRopeTab = Window:Tab({
 
 jumpRopeTab:Button({
 	Title = "Teleport To End (JumpRope)",
-		Callback = function()
-local pos = Vector3.new(734.32, 194.644, 918.741)
-if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-	LocalPlayer.Character:PivotTo(CFrame.new(pos))
-end
-
-
-jumpRopeTab:Button({
-	Title = "Glass ESP (GlassBridge)",
 	Callback = function()
-		print("Showing safe glass bridge path")
+		local pos = Vector3.new(734.32, 194.644, 918.741)
+		if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			LocalPlayer.Character:PivotTo(CFrame.new(pos))
+		end
 	end
 })
+
 
 
 -- === RANDOM FEATURES TAB ===
@@ -185,18 +190,32 @@ randomTab:Toggle({
 	end
 })
 
-randomTab:Button({
+local flying = false
+local flyBV = nil
+local connection = nil
+
+local flying = false
+local flyVelocity = nil
+
+randomTab:Toggle({
 	Title = "Fly",
-	Callback = function()
-		local character = LocalPlayer.Character
-		if character and character:FindFirstChild("HumanoidRootPart") then
-			local bodyVelocity = Instance.new("BodyVelocity")
-			bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
-			bodyVelocity.Velocity = Vector3.new(0, 0, 0)
-			bodyVelocity.Parent = character.HumanoidRootPart
+	Default = false,
+	Callback = function(state)
+		flying = state
+		if state then
+			if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+				flyVelocity = Instance.new("BodyVelocity")
+				flyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+				flyVelocity.Velocity = Vector3.new(0, 0, 0)
+				flyVelocity.Parent = LocalPlayer.Character.HumanoidRootPart
+			end
+		elseif flyVelocity then
+			flyVelocity:Destroy()
+			flyVelocity = nil
 		end
 	end
 })
+
 
 randomTab:Button({
 	Title = "Noclip",
@@ -224,15 +243,9 @@ rebelTab:Button({
 	end
 })
 
-rebelTab:Button({
-	Title = "Free All Players",
-	Callback = function()
-		print("Freeing all players")
-	end
-})
 
 rebelTab:Toggle({
-	Title = "God Mode",
+	Title = "God Mode (heals you)",
 	Default = false,
 	Callback = function(state)
 		if state then
